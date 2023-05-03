@@ -63,3 +63,44 @@ def extract_table(pdf_file):
   table = tabula.read_pdf(pdf_file, pages="all")
   # Return the table as a pandas dataframe
   return table
+
+
+# create a function to insert a dataframe into a database table 
+def insert_table(table, table_name, conn):
+  # Loop through the rows of the dataframe
+  for row in table.itertuples():
+    # Create a SQL query to insert the row into the table
+    query = f"INSERT INTO {table_name} VALUES ("
+    # Loop through the columns of the row
+    for i in range(1, len(row)):
+      # Get the value of the column
+      value = row[i]
+      # Check if the value is a string
+      if isinstance(value, str):
+        # Add quotes around the value
+        value = f"'{value}'"
+      # Add the value to the query
+      query += f"{value},"
+    # Remove the last comma
+    query = query[:-1]
+    # Add the closing bracket
+    query += ")"
+    # Execute the query
+    conn.execute(query)
+  # Commit the changes to the database
+  conn.commit()
+
+  #create a function to check if a row entry exists in the database table\
+def check_row_exists(table_name, conn, **kwargs):
+  # Create a SQL query to check if the row exists
+  query = f"SELECT * FROM {table_name} WHERE "
+  # Loop through the keyword arguments
+  for key, value in kwargs.items():
+    # Add the column name and value to the query
+    query += f"{key} = '{value}' AND "
+  # Remove the last "AND"
+  query = query[:-5]
+  # Execute the query
+  results = conn.execute(query)
+  # Return True if the row exists, False otherwise
+  return len(results.fetchall()) > 0
