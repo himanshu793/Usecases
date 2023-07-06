@@ -34,7 +34,7 @@ import os
 def download_pdf(url, keyword):
   # Create a webdriver object
   driver = webdriver.Chrome()
-  # Get the web page using the driver
+  # Get the web page using the driver``
   driver.get(url)
   # Find all the links that have the keyword in their text
   links = driver.find_elements_by_partial_link_text(keyword)
