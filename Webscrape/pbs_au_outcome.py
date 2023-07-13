@@ -104,3 +104,6 @@ def check_row_exists(table_name, conn, **kwargs):
   results = conn.execute(query)
   # Return True if the row exists, False otherwise
   return len(results.fetchall()) > 0
+
+#Write  a function to extract tables from a PDF file using docx in dataframes
+
