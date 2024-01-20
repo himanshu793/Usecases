@@ -1,0 +1,53 @@
+import numpy as np
+import pandas as pd
+
+# Read the data from the CSV file
+data = pd.read_csv("demo.csv")
+data["Date"] = pd.to_datetime(data["Date"], format="%d-%m-%Y")
+
+# Calculate the quarter
+quarter = data["Date"].dt.quarter
+
+# Calculate the average value for each quarter
+average_value = data.groupby(quarter).mean()
+
+# Calculate the trend component
+trend = np.polyfit(data.index, data["Val"], 1)
+trend_values = trend[0] * data.index + trend[1]
+
+# Calculate the seasonal component
+seasonal_component = data["Val"] - trend_values
+
+# Arrange the trend and seasonal components in a Pandas DataFrame
+df = pd.DataFrame({"Trend": trend_values, "Seasonal": seasonal_component,"Date": data["Date"]})
+
+# Print the DataFrame
+print(df)
+
+
+import numpy as np
+import pandas as pd
+
+# Read the data from the CSV file
+data = pd.read_csv("demo.csv")
+data["Date"] = pd.to_datetime(data["Date"], format="%d-%m-%Y")
+
+# Calculate the quarter
+quarter = data["Date"].dt.quarter
+
+# Calculate the average value for each quarter
+average_value = data.groupby(quarter).mean()
+
+# Calculate the trend component
+# Calculate the trend component
+trend = np.polyfit(data.index, data["Val"], 1)
+trend_values = trend[0] * data.index + trend[1]
+
+# Calculate the seasonal component
+seasonal_component = data["Val"] / trend_values
+
+# Arrange the trend and seasonal components in a Pandas DataFrame
+df = pd.DataFrame({"Trend": trend_values, "Seasonal": seasonal_component,"Date": data["Date"]})
+
+# Print the DataFrame
+print(df)
